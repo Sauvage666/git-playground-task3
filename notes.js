@@ -45,13 +45,24 @@ function main() {
       console.log(ok ? `Deleted note #${id}` : `No note #${id} found`);
       break;
     }
+    case "edit": {
+      const id = Number(rest[0]);
+      const text = rest.slice(1).join(" ").trim();
+      if (!id || !text) {
+        console.log("Usage: notes edit <id> <new text>");
+        return;
+      }
+      const note = store.edit(id, text);
+      console.log(note ? `Updated note #${id}: ${note.text}` : `No note #${id} found`);
+      break;
+    }
     case "count": {
       const total = store.all().length;
       console.log(`You have ${total} note${total === 1 ? "" : "s"}.`);
       break;
     }
     default:
-      console.log("Commands: add <text> | list | search <term> | delete <id> | count");
+      console.log("Commands: add <text> | list | search <term> | delete <id> | edit <id> <new text> | count");
       console.log(`(Session locks after ${config.SESSION_TIMEOUT_MINUTES} minutes of inactivity.)`);
   }
 }
